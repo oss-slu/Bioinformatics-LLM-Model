@@ -60,3 +60,7 @@
 - **Generalist Model:** Not specialized for domains like bioinformatics.
 - **High Computational Requirements:** Larger models require significant computational resources, making them difficult to run for individual developers.
 - **Potential Bias & Harmful Code:** Since CodeGen is trained on GitHub and other online sources, it can adopt biases and harmful language from its training data.
+
+## Example
+
+![Alt text](example.png)
