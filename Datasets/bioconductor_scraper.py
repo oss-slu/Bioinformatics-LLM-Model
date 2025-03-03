@@ -88,7 +88,7 @@ def wait_for_rate_limit():
     """Wait until rate limit resets."""
     remaining, reset_time = check_rate_limit()
     if remaining is not None and remaining == 0:
-        wait_time = max(reset_time - time.time(), 0) + 1
+        wait_time = 15
         print(f"Rate limit exceeded. Waiting for {wait_time:.2f} seconds...")
         time.sleep(wait_time)
 
