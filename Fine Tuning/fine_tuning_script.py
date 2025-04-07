@@ -30,11 +30,7 @@ def preprocess_data(examples):
 
 dataset = dataset.map(preprocess_data, batched=True)
 
-train_dataloader = DataLoader(dataset, batch_size=8)
 
-# Example: Check the first batch
-batch = next(iter(train_dataloader))
-print(batch)
 
 # Initialize the model
 model = RobertaForSequenceClassification.from_pretrained("Salesforce/codet5-small")
