@@ -44,7 +44,6 @@ def generate_code(prompt, max_k):
 def run_r_script(code, task_idx, sample_idx, test_input, expected_output, special_check=None):
     script_path = f"generated_r_scripts/task_{task_idx}_sample_{sample_idx}.R"
 
-    # Some tasks require two inputs
     if isinstance(test_input, tuple):
         input_call = "', '".join(test_input)
     else:
