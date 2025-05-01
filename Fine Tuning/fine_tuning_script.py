@@ -1,21 +1,31 @@
 import json
 import torch
 from torch.utils.data import DataLoader
-from transformers import RobertaTokenizer, RobertaForSequenceClassification, Trainer, TrainingArguments
+from transformers import T5Tokenizer, T5ForConditionalGeneration, Trainer, TrainingArguments, RobertaTokenizer
 from datasets import Dataset
 
+
+# In order to run this script, you need to install the required libraries.
+# You can do this by running the following command:
+# pip install torch transformers datasets sentencepiece 'accelerate>=0.26.0'
+# The version of Python should be around 3.9 - 3.11.
+
+
 # Load your custom dataset from JSON
-with open('/masking/fixed_masked_training_data.json', 'r') as f:
+with open('masking/fixed_masked_training_data.json', 'r') as f:
     data = json.load(f)
 
+print(f"Loaded {len(data)} examples from the dataset.\n")
 
 dataset = Dataset.from_dict({
     'input': [example['input'] for example in data],
     'output': [example['output'] for example in data]
 })
 
+
 tokenizer = RobertaTokenizer.from_pretrained("Salesforce/codet5-small")
 
+print("Tokenizer loaded.\n")
 # Define the preprocessing function
 def preprocess_data(examples):
     inputs = [f"Summarize R: {code}" for code in examples['input']]
@@ -30,15 +40,14 @@ def preprocess_data(examples):
 
 dataset = dataset.map(preprocess_data, batched=True)
 
-
+print("Data preprocessing complete.\n")
 
 # Initialize the model
-model = RobertaForSequenceClassification.from_pretrained("Salesforce/codet5-small")
-
+model = T5ForConditionalGeneration.from_pretrained("Salesforce/codet5-small")
+print("Model loaded.")
 # Set up TrainingArguments
 training_args = TrainingArguments(
     output_dir='./results',          
-    evaluation_strategy="epoch",     
     learning_rate=2e-5,              
     per_device_train_batch_size=8,   
     per_device_eval_batch_size=8,    
@@ -56,6 +65,7 @@ trainer = Trainer(
 )
 
 trainer.train()
+print("Training complete.\n")
 
 # Save the model after training
 model.save_pretrained('./final_model')
