@@ -3,6 +3,8 @@ import re
 from bs4 import BeautifulSoup
 import json
 import time
+from urllib.parse import urlparse
+
 
 BASE_URL = "https://www.datasciencemeta.com/rpackages"
 OUTPUT_JSON_FILE = "r_package_data.json"
@@ -44,7 +46,8 @@ def extract_github_url(package_url):
         if next_td:
             links = [a['href'] for a in next_td.find_all('a', href=True)]
             for url in links:
-                if 'github.com' in url:
+                host = urlparse(url).hostname
+                if host == 'github.com' :
                     return url
 
     return None
